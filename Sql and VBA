@@ -1,0 +1,39 @@
+-- SIRALAMA YAPMAK İÇİN
+row_number () over (partition by  order by  ) 
+
+-- INDEKSLİ BİR DEĞERİ SÜTÜNA YAZDIRMAK İÇİN
+select * from (
+select ALAN1, ALAN2,
+MAX (DECODE (INDEKS, '1', AREA_CODE, NULL)) as KOD1,
+MAX (DECODE (INDEKS, '1', PHONE_NUMBER, NULL)) as TEL1,
+from TABLO1
+group by ALAN1, ALAN2, 
+)
+where ALAN1 is not null 
+
+
+-- LAG LEAD İLE ÖNCEKİ GÜN VEYA SONRAKİ GÜN BİLGİSİNİ GETİRME
+Select 
+LAG(NUM_DELAY_DAY,1,0) OVER (PARTITION BY CASH_LOAN_ID ORDER BY DELAY_DT) krd_PREV_GGS,
+LEAD(NUM_DELAY_DAY,1,0) OVER (PARTITION BY CASH_LOAN_ID ORDER BY DELAY_DT) krd_NEXT_GGS,
+from TABLO
+where TO_CHAR(delay_dt+1,'YYYYMMDD') >=To_char(sysdate-5,'yyyymmdd')
+
+
+-- VBA ile otomatik mail gönderme kodu
+Set OApp = CreateObject("Outlook.Application")
+Set OMail = OApp.CreateItem(0)
+        signature = OMail.body
+    With OMail
+    .To = ""
+    .CC = ""
+    .Subject = "" 
+    .body = "Merhaba,"&chr(10)&"Güncel data ilgili ortak alana kayıt edilmiştir."&chr(10)&" Data kayıt yeri : \\fsprduom01\PerKrdIzlemeveTakip\_PerKrdIzlemeveTakipOrtak\KobiYakinTakip_RESTORE2\SUXARAMAPERFORMANS  "&chr(10)&" Saygılarımızla,"&chr(10)&"İyi çalışmalar. " & vbNewLine & signature 
+  .Send
+    End With
+
+
+
+-- TIME STAMP  formatının saati için
+TO_CHAR(TARIH,'HH.MI.SS AM')>'04.00.00' AND  TO_CHAR(TARIH,'AM')='ÖS'
+
